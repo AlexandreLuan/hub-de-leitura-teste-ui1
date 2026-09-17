@@ -14,9 +14,27 @@ describe('Funcionalidade: Busca de Livros', () => {
 
     });
 
-     it('Deve fazer a busca de um livro do arquivo de massa de dados', () => {
+    it('Deve fazer a busca de um livro do arquivo de massa de dados', () => {
         cy.get('#search-input').type(catalogo[1].livro)
         cy.get('.card-title').should('contain', catalogo[1].livro)
 
     });
-});
+
+    it('Deve fazer a busca de um livro usando filtro', () => {
+        cy.fixture('livros').then((cat) => {
+            cy.get('#search-input').type(cat[1].livro)
+            cy.get('.card-title').should('contain', catalogo[1].livro)
+
+        })
+    });
+
+    it('Deve validar todos os livros da lista', () => {
+        cy.fixture('livros').then((cat) => {
+            cat.forEach(iten => {
+                cy.get('#search-input').clear().type(iten.livro)
+                cy.get('.card-title').should('contain', iten.livro)
+            })
+
+        })
+    });
+    });

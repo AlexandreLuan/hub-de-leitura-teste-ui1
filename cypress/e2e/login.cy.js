@@ -24,5 +24,6 @@ describe('Funcionalidade: Login', () => {
     cy.login(user.email, user.senha)
 
     });
+    
 
 });

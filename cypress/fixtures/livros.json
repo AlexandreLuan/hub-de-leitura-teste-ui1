@@ -1,26 +1,22 @@
 [
-
-{
-  "livro": "1984",
-  "autor": "ficção"
-
-},
-
-{
-  "livro": "Dom Quixote",
-  "autor": "Romance"
-
-},
-
-{
-  "livro": "O Hobbit",
-  "autor": "Aventura"
-
-}
-
-
-
-
-
-
+  {
+    "livro": "1984",
+    "autor": "ficção"
+  },
+  {
+    "livro": "Dom Quixote",
+    "autor": "Romance"
+  },
+  {
+    "livro": "O Hobbit",
+    "autor": "Aventura"
+  },
+  {
+    "livro": "A Arte da Guerra",
+    "autor": "Estratégia"
+  },
+  {
+    "livro": "A Divina Comédia",
+    "autor": "Poesia"
+  }
 ]
