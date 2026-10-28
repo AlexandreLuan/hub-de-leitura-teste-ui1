@@ -15,14 +15,8 @@ pipeline {
                 dir('hub-de-leitura-integrado2') {
                     bat 'npm install'
                     
-                    // Inicia o servidor em segundo plano no Windows usando start /B
-                    bat 'start /B npm start'
-                    
-                    // Aguarda alguns segundos para garantir que o servidor subiu na porta 3000
-                    bat 'timeout /t 5 /nobreak'
-                    
-                    // Aqui você coloca o comando para rodar os seus testes (ex: npx cypress run)
-                    // bat 'npx cypress run'
+                    // Sobe o servidor, testa se a porta 3000 responde e roda o Cypress
+                    bat 'npx start-server-and-test start http://localhost:3000 cypress:run'
                 }
             }
         }
