@@ -10,11 +10,19 @@ pipeline {
                 bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git'
             }
         }
-        stage('Instalar dependências') {
+        stage('Instalar dependências e Executar Testes') {
             steps {
                 dir('hub-de-leitura-integrado2') {
                     bat 'npm install'
-                    bat 'npm start'
+                    
+                    // Inicia o servidor em segundo plano no Windows usando start /B
+                    bat 'start /B npm start'
+                    
+                    // Aguarda alguns segundos para garantir que o servidor subiu na porta 3000
+                    bat 'timeout /t 5 /nobreak'
+                    
+                    // Aqui você coloca o comando para rodar os seus testes (ex: npx cypress run)
+                    // bat 'npx cypress run'
                 }
             }
         }
