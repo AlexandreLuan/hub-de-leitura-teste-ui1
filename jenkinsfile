@@ -3,13 +3,13 @@ pipeline {
     tools {
         nodejs "nodejs"
     }
-    stages {
         stage('Clonar o hub de leitura integrado') {
             steps {
-                bat 'rm -rf hub-de-leitura-integrado2'
-                bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git'
-            }
-        }
+        // Remove a pasta de forma segura no Windows caso ela exista
+        bat 'if exist hub-de-leitura-integrado2 rd /s /q hub-de-leitura-integrado2'
+        bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git'
+    }
+}
         stage('Instalar dependências') {
             steps {
                 dir('hub-de-leitura-integrado2') {
