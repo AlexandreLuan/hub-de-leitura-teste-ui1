@@ -14,9 +14,7 @@ pipeline {
             steps {
                 dir('hub-de-leitura-integrado2') {
                     bat 'npm install'
-                    
-                    // Sobe o servidor, testa se a porta 3000 responde e roda o Cypress
-                    bat 'npx start-server-and-test start http://localhost:3000 cypress:run'
+                    bat 'npm start'
                 }
             }
         }
