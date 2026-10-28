@@ -6,6 +6,8 @@ pipeline {
     stages {
         stage('Clonar o hub de leitura integrado') {
             steps {
+                // Comando seguro para apagar a pasta no Windows se ela já existir
+                bat 'if exist hub-de-leitura-integrado2 rmdir /s /q hub-de-leitura-integrado2'
                 bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git'
             }
         }
@@ -13,7 +15,7 @@ pipeline {
             steps {
                 dir('hub-de-leitura-integrado2') {
                     bat 'npm install'
-                    bat 'npm start'
+                    bat 'npx start-server-and-test start http://localhost:3000 "npx cypress run"'
                 }
             }
         }
