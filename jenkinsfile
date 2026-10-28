@@ -6,7 +6,6 @@ pipeline {
     stages {
         stage('Clonar o hub de leitura integrado') {
             steps {
-                bat 'if exist hub-de-leitura-integrado2 rd /s /q hub-de-leitura-integrado2'
                 bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git'
             }
         }
