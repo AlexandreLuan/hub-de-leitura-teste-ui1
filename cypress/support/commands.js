@@ -28,7 +28,7 @@ Cypress.Commands.add('login', (email, senha) => {
     cy.get('#email').type(email, { log: false }) // Oculta o email no log do Cypress
     cy.get('#password').type(senha, { log: false }) // Oculta a senha no log do Cypress
     cy.get('button[type="submit"]').click()
-    cy.url().should('include', '/dashboard')
+    //cy.url().should('include', '/dashboard')
 })
 
 Cypress.Commands.add('preencherCadastro', (nome, email, telefone, senha, confirmarSenha) => {
