@@ -21,7 +21,7 @@ describe('Funcionalidade: Login', () => {
     });
 
     it('Deve fazer login com sucesso com conta Admin - Usando comando customizado', () => {
-    cy.login(user[0].email, user[0].senha)
+    cy.login(user[1].email, user[1].senha)
     });
     
 });
