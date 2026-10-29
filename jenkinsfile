@@ -4,17 +4,23 @@ pipeline {
         nodejs "nodejs"
     }
     stages {
-        stage('Clonar o hub de leitura integrado') {
+        stage('Preparar Servidor (Backend)') {
             steps {
-                bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git'
+                // Limpa e clona o repositório do backend em uma pasta isolada
+                bat 'if exist backend-app rmdir /s /q backend-app'
+                bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git backend-app'
+                
+                // Instala as dependências do backend
+                dir('backend-app') {
+                    bat 'npm install'
+                }
             }
         }
-        stage('Instalar dependências e Executar Testes') {
+        stage('Executar Testes Cypress') {
             steps {
-                dir('hub-de-leitura-integrado2') {
-                    bat 'npm install'
-                    bat 'npx start'
-                }
+                // Sobe o servidor do backend em background, espera a porta 3000 abrir, 
+                // e roda o Cypress na raiz do SEU projeto de testes (onde está o cypress.config.js)
+                bat 'npx start-server-and-test "npm start --prefix backend-app" http://localhost:3000 "npx cypress run"'
             }
         }
     }
