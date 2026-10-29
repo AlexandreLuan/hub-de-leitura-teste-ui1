@@ -4,13 +4,16 @@ pipeline {
         nodejs "nodejs"
     }
     stages {
-        stage('Preparar Servidor (Backend)') {
+        stage('Instalar Dependências e Backend') {
             steps {
-                // Limpa e clona o repositório do backend em uma pasta isolada
+                // 1. Instala as dependências do Cypress na raiz do projeto do Jenkins
+                bat 'npm install'
+                
+                // 2. Prepara o backend clonando na pasta isolada
                 bat 'if exist backend-app rmdir /s /q backend-app'
                 bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git backend-app'
                 
-                // Instala as dependências do backend
+                // 3. Instala as dependências do backend
                 dir('backend-app') {
                     bat 'npm install'
                 }
@@ -18,8 +21,7 @@ pipeline {
         }
         stage('Executar Testes Cypress') {
             steps {
-                // Sobe o servidor do backend em background, espera a porta 3000 abrir, 
-                // e roda o Cypress na raiz do SEU projeto de testes (onde está o cypress.config.js)
+                // Sobe o servidor do backend em background e executa o Cypress na raiz
                 bat 'npx start-server-and-test "npm start --prefix backend-app" http://localhost:3000 "npx cypress run"'
             }
         }
