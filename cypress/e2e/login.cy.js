@@ -20,8 +20,12 @@ describe('Funcionalidade: Login', () => {
 
     });
 
-    it('Deve fazer login com sucesso com conta Admin - Usando comando customizado', () => {
-    cy.login(user[1].email, user[1].senha)
+it('Deve fazer login com sucesso com conta Admin - Usando comando customizado', () => {
+        cy.fixture('usuario').then((user) => {
+            // Pega o admin (seja o primeiro ou segundo item da lista)
+            const admin = user.find(u => u.email.includes('admin')) || user[0];
+            cy.login(admin.email, admin.senha);
+        });
     });
-    
-});
+
+})
