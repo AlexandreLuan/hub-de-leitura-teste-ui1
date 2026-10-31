@@ -1,29 +1,62 @@
 pipeline {
-    agent any
+    agent any 
     tools {
-        nodejs "nodejs"
+        nodejs "nodejs" 
     }
     stages {
-        stage('Instalar Dependências e Backend') {
+        stage('Clonar o hub de leitura integrado') {
             steps {
-                // 1. Instala as dependências do Cypress na raiz do projeto do Jenkins
-                bat 'npm install'
-                
-                // 2. Prepara o backend clonando na pasta isolada
-                bat 'if exist backend-app rmdir /s /q backend-app'
-                bat 'git clone https://github.com/EBAC-QE/hub-de-leitura-integrado2.git backend-app'
-                
-                // 3. Instala as dependências do backend
-                dir('backend-app') {
-                    bat 'npm install'
+                bat '''
+                    if exist hub-de-leitura-integrado2 rmdir /s /q hub-de-leitura-integrado2
+                    git clone https://github.com/AlexandreLuan/hub-de-leitura-integrado2.git
+                '''
+            }
+        }
+        
+        stage('Instalar dependencias do projeto') {
+            steps { 
+                dir('hub-de-leitura-integrado2') {
+                    bat '''
+                        call npm install
+                        start /b npm start
+                    '''
                 }
             }
         }
-        stage('Executar Testes Cypress') {
+        
+        stage('Clonar o projeto de teste') {
             steps {
-                // Sobe o servidor do backend em background e executa o Cypress na raiz
-                bat 'npx start-server-and-test "npm start --prefix backend-app" http://localhost:3000 "npx cypress run"'
+                bat '''
+                    if exist hub-de-leitura-teste-ui1 rmdir /s /q hub-de-leitura-teste-ui1
+                    git clone https://github.com/AlexandreLuan/hub-de-leitura-teste-ui1.git
+                '''
             }
+        }
+        
+        stage('Instalar dependencias do projeto de teste') {
+            steps { 
+                dir('hub-de-leitura-teste-ui1') {
+                    bat 'call npm install' 
+                }
+            }
+        }
+        
+        stage('Executar os testes automatizados') {
+            steps { 
+                dir('hub-de-leitura-teste-ui1') {
+                    bat '''
+                        echo Aguardando o servidor subir na porta 3000...
+                        powershell -Command "foreach ($i in 1..15) { try { $response = Invoke-WebRequest -Uri 'http://localhost:3000' -UseBasicParsing; if ($response.StatusCode -eq 200) { Write-Host 'Servidor online!'; exit 0 } } catch { Start-Sleep -Seconds 2 } }; Write-Host 'Tempo excedido para o servidor'; exit 1"
+                        call npm test
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            bat 'taskkill /F /IM node.exe || exit 0'
         }
     }
 }
