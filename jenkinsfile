@@ -8,7 +8,7 @@ pipeline {
             steps {
                 bat '''
                     if exist hub-de-leitura-integrado2 rmdir /s /q hub-de-leitura-integrado2
-                    git clone https://github.com/AlexandreLuan/hub-de-leitura-integrado2.git
+                    git clone --depth 1 https://github.com/AlexandreLuan/hub-de-leitura-integrado2.git
                 '''
             }
         }
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 bat '''
                     if exist hub-de-leitura-teste-ui1 rmdir /s /q hub-de-leitura-teste-ui1
-                    git clone https://github.com/AlexandreLuan/hub-de-leitura-teste-ui1.git
+                    git clone --depth 1 https://github.com/AlexandreLuan/hub-de-leitura-teste-ui1.git
                 '''
             }
         }
@@ -56,6 +56,10 @@ pipeline {
     
     post {
         always {
+            dir('hub-de-leitura-teste-ui1') {
+                archiveArtifacts artifacts: 'cypress\screenshots/**/*.*,cypress\videos/**/*.*', allowEmptyArchive: true
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            }
             bat 'taskkill /F /IM node.exe || exit 0'
         }
     }

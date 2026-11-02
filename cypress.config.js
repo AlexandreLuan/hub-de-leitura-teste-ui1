@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const { allureCypress } = require ("allure-cypress/reporter");
 
 module.exports = defineConfig({
   projectId: "pzcc5t",
@@ -8,7 +9,11 @@ module.exports = defineConfig({
     baseUrl: "http://localhost:3000",
 
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      allureCypress(on, config), {
+        resultsDir: "allure-results",
+      
+      };
+      return config;
     },
     video: true
   },
